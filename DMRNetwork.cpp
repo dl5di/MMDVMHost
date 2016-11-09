@@ -368,23 +368,22 @@ void CDMRNetwork::clock(unsigned int ms)
 					m_retryTimer.start();
 					break;
 				case WAITING_AUTHORISATION:
+					writeConfig();
 					if (m_options.empty()) {
-						writeConfig();
-						m_status = WAITING_CONFIG;
-					} else {
-						writeOptions();
 						m_status = WAITING_OPTIONS;
+					} else {
+						m_status = WAITING_CONFIG;
 					}
 					m_timeoutTimer.start();
 					m_retryTimer.start();
 					break;
-				case WAITING_OPTIONS:
-					writeConfig();
-					m_status = WAITING_CONFIG;
+				case WAITING_CONFIG:
+					writeOptions();
+					m_status = WAITING_OPTIONS;
 					m_timeoutTimer.start();
 					m_retryTimer.start();
 					break;
-				case WAITING_CONFIG:
+				case WAITING_OPTIONS:
 					LogMessage("DMR, Logged into the master successfully");
 					m_status = RUNNING;
 					m_timeoutTimer.start();
