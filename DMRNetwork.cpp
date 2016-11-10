@@ -472,9 +472,11 @@ bool CDMRNetwork::writeAuthorisation()
 bool CDMRNetwork::writeOptions()
 {
 	char buffer[300U];
-	::sprintf(buffer, "RPTO%s", m_options.c_str());
+	::memcpy(buffer + 0U, "RPTO", 4U);
+	::memcpy(buffer + 4U, m_id, 4U);
+	::sprintf(buffer + 8U, "%s", m_options.c_str());
 
-	return write((unsigned char*)buffer, (unsigned int)::strlen(buffer));
+	return write((unsigned char*)buffer, (unsigned int)::strlen(m_options.c_str())+8);
 }
 
 bool CDMRNetwork::writeConfig()
